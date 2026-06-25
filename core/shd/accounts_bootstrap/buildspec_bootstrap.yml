@@ -1,0 +1,34 @@
+# This buildspec is being used by AVM pipeline. More specifically it is set in blueprints/application/bootstrap.tf file.
+version: 0.2
+env:
+  variables:
+    TF_IN_AUTOMATION: "TRUE"
+  exported-variables:
+    - TF_IN_AUTOMATION
+
+phases:
+  build:
+    commands:
+      - echo Deploying version $(cat /VERSION)
+      - terraform version
+      - kubectl version --client --short
+      - helm version
+      - cd ${account_bootstap_path}/../cicd
+      - echo Current working directory is $PWD
+      - |
+        terraform init \
+          -no-color \
+          -input=false
+      - |
+        terraform plan \
+          -no-color \
+          -input=false
+      - |
+        terraform apply \
+          -no-color \
+          -input=false \
+          -auto-approve
+      - terraform output | tee /tmp/tf_output.yml
+      - echo "build finished on `date`"
+    finally:
+      - printenv | grep -v AWS_SE* | sort | tee /tmp/env.txt

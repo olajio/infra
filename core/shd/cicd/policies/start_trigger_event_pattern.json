@@ -1,0 +1,16 @@
+{
+  "source": [
+    "aws.codebuild"
+  ],
+  "detail-type": [
+    "CodeBuild Build State Change"
+  ],
+  "detail": {
+    "build-status": [
+      "SUCCEEDED"
+    ],
+    "project-name": [
+      "core-${env}-lz-us-east-2-cp-bootstrap"
+    ]
+  }
+}

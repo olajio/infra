@@ -1,0 +1,8 @@
+ou             = "core"
+environment    = "shd"
+component      = "cicd"
+cwd            = "core/shd/cicd"
+solutions_root = "../infra"
+cicd_name      = "infra-pipeline"
+naming_prefix  = "deploy"
+appcode_cicd   = "CCICD"

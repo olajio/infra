@@ -1,0 +1,65 @@
+# This buildspec is being used by AVM pipeline. More specifically it is set in blueprints/application/bootstrap.tf file.
+version: 0.2
+env:
+  variables:
+    TF_IN_AUTOMATION: "TRUE"
+    GIT_REPO_URL: "github.com/hsv-internal/hs_aws_shared_infra"
+    MODULES_REPO_URL: "github.com/hsv-internal/hs_aws_terraform_modules"
+  parameter-store:
+    GHE_TOKEN: "/global/github/token"
+  exported-variables:
+    - TF_IN_AUTOMATION
+
+phases:
+  install:
+    commands:
+      - echo Current working directory is $PWD
+      - SRC_LOCATION=`mktemp -d /tmp/infra_app_repo_XXXX`
+      - git ls-remote --tags --heads https://git:${GHE_TOKEN}@${GIT_REPO_URL}  | grep -q "/$SRC_VERSION" || SRC_VERSION=master
+      - echo Will download src version $SRC_VERSION
+      - git clone --quiet --branch=$SRC_VERSION --depth=1 https://git:${GHE_TOKEN}@$GIT_REPO_URL $SRC_LOCATION
+      - echo Will download MODULES
+      - git clone --quiet --branch=$SRC_VERSION --depth=1 https://git:${GHE_TOKEN}@$MODULES_REPO_URL $SRC_LOCATION/modules
+      - echo "build finished on `date`"
+  build:
+    commands:
+      - terraform version
+      - cd ${SRC_LOCATION}/${CWD}/${SOLUTIONS_ROOT}/${SOLUTION_NAME}
+      - echo Current working directory is $PWD
+      - |
+        terraform init \
+          -no-color \
+          -input=false
+      - |
+        if egrep -q "all_plan|${SOLUTION_NAME}_plan" <<<$TF_ACTIONS
+        then
+          terraform plan \
+            -no-color \
+            -input=false
+        else
+          echo Will skip plan
+        fi
+      - |
+        if egrep -q "all_destroy|${SOLUTION_NAME}_destroy" <<<$TF_ACTIONS
+        then
+          terraform destroy \
+            -no-color \
+            -input=false \
+            -auto-approve
+        else
+          echo Will skip destroy
+        fi
+      - |
+        if egrep -q "all_apply|${SOLUTION_NAME}_apply" <<<$TF_ACTIONS
+        then
+          terraform apply \
+            -no-color \
+            -input=false \
+            -auto-approve
+        else
+          echo Will skip apply
+        fi
+      - terraform output | tee /tmp/tf_output.yml
+      - echo "build finished on `date`"
+    finally:
+      - printenv | grep -v AWS_SE* | sort | tee /tmp/env.txt

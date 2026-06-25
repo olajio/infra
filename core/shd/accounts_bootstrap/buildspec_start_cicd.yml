@@ -1,0 +1,18 @@
+# This buildspec is being used by AVM pipeline. More specifically it is set in blueprints/application/bootstrap.tf file.
+version: 0.2
+env:
+  variables:
+    TF_IN_AUTOMATION: "TRUE"
+  exported-variables:
+    - TF_IN_AUTOMATION
+
+phases:
+  build:
+    commands:
+      - echo Deploying version $(cat /VERSION)
+      - cd ${account_bootstap_path}
+      - echo Current working directory is $PWD
+      - aws codepipeline start-pipeline-execution --name deploy-cp-infra-pipeline
+      - echo "build finished on `date`"
+    finally:
+      - printenv | grep -v AWS_SE* | sort | tee /tmp/env.txt

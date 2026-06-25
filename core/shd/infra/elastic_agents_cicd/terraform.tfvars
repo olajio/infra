@@ -1,0 +1,7 @@
+ou             = "core"
+environment    = "shd"
+component      = "ci"
+cwd            = "core/shd/infra/elastic_agents_cicd"
+solutions_root = "../elastic_agents"
+solution_name  = "elastic_agents-infra"
+naming_prefix  = "deploy"
