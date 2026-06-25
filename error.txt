@@ -1,0 +1,5 @@
+Secrets should not use customer-managed KMS keys. If kms_key_id is present, call is_aws_managed_secretsmanager_key(kms_key_id) to verify it is an AWS-managed default key
+Secret secret uses a customer-managed KMS key 7b8c9c18-1d2f-48bd-bc89-abed791df0c7. Secrets should use AWS-managed default encryption keys to simplify key management and reduce potential misconfiguration risks. [Source: hs_aws_terraform_modules/sm_secret/v2.3/secret.tf:5]
+Resource: module.secrets_manager_elastic_zero_touch.aws_secretsmanager_secret.secret (aws_secretsmanager_secret)
+Solution: elastic_agents
+Source: hs_aws_terraform_modules/sm_secret/v2.3/secret.tf:5
