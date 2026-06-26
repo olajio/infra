@@ -1,18 +1,42 @@
-The PAT is now the first argument, with owner, repo, base branch, and API URL following. The base branch and API URL are optional and default to `main` and `https://api.github.com`.
+For your repo (`olajio/infra`), here's how to run it.
 
-To run it, make it executable once, then call it with your arguments:
+First, fill in the three placeholders at the top of the script. Based on your URL, owner and repo are already determined:
 
 ```bash
-chmod +x test_pat_write.sh
-
-# Basic — github.com, defaults base branch to main
-./test_pat_write.sh ghp_yourTokenHere myorg myrepo
-
-# Specify a different base branch
-./test_pat_write.sh ghp_yourTokenHere myorg myrepo develop
-
-# GitHub Enterprise Server (pass base branch + API URL)
-./test_pat_write.sh ghp_yourTokenHere myorg myrepo main https://github.example.com/api/v3
+PAT="ghp_yourActualTokenHere"   # paste your real PAT
+OWNER="olajio"
+REPO="infra"
 ```
 
-One small security note since you'll be passing the token on the command line: it'll show up in your shell history and in the process list (`ps`) while running. To keep it out of history, prefix the command with a space (works if your shell has `HISTCONTROL=ignorespace` set), or read it from an environment variable instead — happy to tweak the script to accept `GITHUB_PAT` from the env as a fallback if you'd prefer that pattern.
+`BASE="main"` is already correct for you, and `API` stays as `https://api.github.com` since this is github.com (not Enterprise Server).
+
+Then save the file (say as `test_pat_write.sh`) and run it:
+
+```bash
+# Make it executable (only needed once)
+chmod +x test_pat_write.sh
+
+# Run it
+./test_pat_write.sh
+```
+
+Or without changing permissions:
+
+```bash
+bash test_pat_write.sh
+```
+
+What you should see on success:
+
+```
+Base main SHA: a1b2c3d4...
+Create branch: 201
+Write file:    201
+Delete branch: 204
+```
+
+`201` / `201` / `204` means the PAT can create a branch, write a file, and delete the branch — full write access confirmed. If you see `403` or `404` on the create/write steps instead, the token doesn't have write access to `olajio/infra` (for a fine-grained PAT, that means it needs Contents: Read and write on this repo).
+
+One dependency note: the script uses `jq` to parse the base SHA. If you get a `jq: command not found` error, install it first with `sudo apt install jq` (Debian/Ubuntu) or `brew install jq` (macOS).
+
+Two cleanup caveats worth knowing: the script leaves the `.pat-write-test.txt` file committed on the test branch, but since the last step deletes that whole branch, nothing lingers on `main`. And if any step fails partway, `set -euo pipefail` will stop the script — so you may occasionally need to manually delete a leftover `pat-write-test-*` branch from the repo.
