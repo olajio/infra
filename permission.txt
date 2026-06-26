@@ -1,0 +1,44 @@
+HSE-NYC-MAC-142:PycharmProjects oolajide$ curl -s -D - \
+>   -H "Authorization: Bearer $service_elastic_auto_HSV" \
+>   -H "Accept: application/vnd.github+json" \
+>   https://api.github.com/repos/hsv-internal/delete_duplicate_data_view | head -40
+HTTP/2 200 
+date: Fri, 26 Jun 2026 20:07:34 GMT
+content-type: application/json; charset=utf-8
+content-length: 7749
+cache-control: private, max-age=60, s-maxage=60
+vary: Accept, Authorization, Cookie, X-GitHub-OTP,Accept-Encoding, Accept, X-Requested-With
+etag: "5bd30364730bc43ccee4531cb056830fe18f0e83acd86ad83d26c3cb8f70d5a6"
+last-modified: Thu, 12 Feb 2026 07:39:52 GMT
+x-oauth-scopes: admin:enterprise, admin:gpg_key, admin:org, admin:org_hook, admin:public_key, admin:repo_hook, admin:ssh_signing_key, audit_log, codespace, copilot, delete:packages, delete_repo, gist, notifications, project, repo, user, workflow, write:discussion, write:network_configurations, write:packages
+x-accepted-oauth-scopes: repo
+x-github-media-type: github.v3; format=json
+x-github-api-version-selected: 2022-11-28
+access-control-expose-headers: ETag, Link, Location, Retry-After, X-GitHub-OTP, X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Used, X-RateLimit-Resource, X-RateLimit-Reset, X-OAuth-Scopes, X-Accepted-OAuth-Scopes, X-Poll-Interval, X-GitHub-Media-Type, X-GitHub-SSO, X-GitHub-Request-Id, Deprecation, Sunset, Warning
+access-control-allow-origin: *
+strict-transport-security: max-age=31536000; includeSubdomains; preload
+x-frame-options: deny
+x-content-type-options: nosniff
+x-xss-protection: 0
+referrer-policy: origin-when-cross-origin, strict-origin-when-cross-origin
+content-security-policy: default-src 'none'
+server: github.com
+x-ratelimit-limit: 5000
+x-ratelimit-remaining: 4992
+x-ratelimit-reset: 1782506528
+x-ratelimit-used: 8
+x-ratelimit-resource: core
+x-github-request-id: 6D5E:2A37A:44A3C9:F56282:6A3EDC05
+
+{
+  "id": 1156044545,
+  "node_id": "R_kgDOROfXAQ",
+  "name": "delete_duplicate_data_view",
+  "full_name": "hsv-internal/delete_duplicate_data_view",
+  "private": true,
+  "owner": {
+    "login": "hsv-internal",
+    "id": 207052963,
+    "node_id": "O_kgDODFdgow",
+    "avatar_url": "https://avatars.githubusercontent.com/u/207052963?v=4",
+    "gravatar_id": "",
