@@ -10,10 +10,15 @@ API="https://api.github.com"         # GHES: https://HOST/api/v3
 AUTH=(-H "Authorization: Bearer $PAT" -H "Accept: application/vnd.github+json")
 
 # 1. Get the SHA of the base branch
+# 1. Get the SHA of the base branch
+# BASE_SHA=$(curl -s "${AUTH[@]}" \
+#   "$API/repos/$OWNER/$REPO/git/ref/heads/$BASE" | jq -r .object.sha)
+# echo "Base $BASE SHA: $BASE_SHA"
+# [ "$BASE_SHA" = "null" ] && { echo "Can't read base branch — check repo/branch/token"; exit 1; }
+
 BASE_SHA=$(curl -s "${AUTH[@]}" \
-  "$API/repos/$OWNER/$REPO/git/ref/heads/$BASE" | jq -r .object.sha)
-echo "Base $BASE SHA: $BASE_SHA"
-[ "$BASE_SHA" = "null" ] && { echo "Can't read base branch — check repo/branch/token"; exit 1; }
+  "$API/repos/$OWNER/$REPO/git/ref/heads/$BASE" \
+  | grep -m1 '"sha"' | sed -E 's/.*"sha": *"([^"]+)".*/\1/')
 
 # 2. Create the new branch
 echo -n "Create branch: "
